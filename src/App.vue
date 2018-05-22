@@ -1,17 +1,27 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+
+    <Slides />
+
+    <div class="sideBar">
+      <BusSchedule />
+      <Weather />
+    </div>
+
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import Slides from "./components/Slides.vue";
+import BusSchedule from "./components/BusSchedule.vue";
+import Weather from "./components/Weather.vue";
 
 export default {
   name: "app",
   components: {
-    HelloWorld
+    Slides,
+    BusSchedule,
+    Weather
   }
 };
 </script>
@@ -24,5 +34,16 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.sideBar {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  height: 100%;
+  width: 30%;
+  z-index: 10;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
 }
 </style>
