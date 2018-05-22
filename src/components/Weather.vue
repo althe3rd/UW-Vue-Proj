@@ -1,6 +1,6 @@
 <template>
   <div class="weather" v-if="dataReady">
-    <div class="icon sun-shower">
+    <div class="icon sun-shower" :class="{ showIcon: isSunShower }">
       <div class="cloud"></div>
       <div class="sun">
       <div class="rays"></div>
@@ -8,7 +8,7 @@
     <div class="rain"></div>
   </div>
 
-  <div class="icon thunder-storm">
+  <div class="icon thunder-storm" :class="{ showIcon: isStorm }">
     <div class="cloud"></div>
     <div class="lightning">
       <div class="bolt"></div>
@@ -16,12 +16,12 @@
     </div>
   </div>
 
-  <div class="icon cloudy">
+  <div class="icon cloudy" :class="{ showIcon: isClouds }">
     <div class="cloud"></div>
     <div class="cloud"></div>
   </div>
 
-    <div class="icon flurries">
+    <div class="icon flurries" :class="{ showIcon: isSnow }">
       <div class="cloud"></div>
       <div class="snow">
         <div class="flake"></div>
@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <div class="icon sunny">
+    <div class="icon sunny" :class="{ showIcon: isSunny }">
       <div class="sun">
         <div class="rays"></div>
       </div>
@@ -40,8 +40,10 @@
       <div class="rain"></div>
     </div>
 
-    <div class="temp">{{ weatherdata.main.temp }} &#176;F</div>
-    <div class="condition">{{ weatherdata.weather[0].main }}</div>
+
+        <div class="temp">{{ tempInt }} &#176;F</div>
+        <div class="condition">{{ weatherdata.weather[0].main }}</div>
+
   </div>
 </template>
 
@@ -55,8 +57,18 @@ export default {
       weatherdata: [],
       errors: [],
       dataReady: false,
-      isRain: false
+      isRain: false,
+      isClouds: false,
+      isSunny: false,
+      isStorm: false,
+      isSunShower: false,
+      isSnow: false
     };
+  },
+  computed: {
+    tempInt: function() {
+      return parseInt(this.weatherdata.main.temp);
+    }
   },
   created: function() {
     var obj = this;
@@ -71,7 +83,7 @@ export default {
       var diffMs = currentdate - datecheckedlast;
 
       // limit checks to once a minute
-      if (diffMs > 60000) {
+      if (diffMs > 0) {
         this.getWeather();
 
         //Update weather every 10 minutes
@@ -81,13 +93,13 @@ export default {
 
         //If within timelimit use last pull stored locally
       } else {
-        this.dataReady = true;
         this.weatherdata = weathercached;
+        this.adaptCondition();
+        this.dataReady = true;
       }
     } else {
       this.getWeather();
     }
-    this.adaptCondition();
   },
   methods: {
     getWeather: function() {
@@ -100,6 +112,7 @@ export default {
         .then(response => {
           // JSON responses are automatically parsed.
           this.weatherdata = response.data;
+          this.adaptCondition();
           this.dataReady = true;
 
           // Save weather data to local storage in case API isn't availble next time
@@ -114,8 +127,30 @@ export default {
         });
     },
     adaptCondition: function() {
-      if (this.weatherdata.weather[0].main == "Drizzle") {
+      if (this.weatherdata.weather[0].main == "Rain") {
         this.isRain = true;
+        this.isClouds = false;
+        this.isSunShower = false;
+        this.isStorm = false;
+        this.isSunny = false;
+      } else if (this.weatherdata.weather[0].main == "Clouds") {
+        this.isRain = false;
+        this.isClouds = true;
+        this.isSunShower = false;
+        this.isStorm = false;
+        this.isSunny = false;
+      } else if (this.weatherdata.weather[0].main == "Sunny") {
+        this.isRain = false;
+        this.isClouds = false;
+        this.isSunShower = false;
+        this.isStorm = false;
+        this.isSunny = true;
+      } else {
+        this.isRain = false;
+        this.isClouds = false;
+        this.isSunShower = false;
+        this.isStorm = false;
+        this.isSunny = true;
       }
     }
   }
@@ -194,9 +229,10 @@ p {
   background: currentColor;
   border-radius: 50%;
   box-shadow: -2.1875em 0.6875em 0 -0.6875em, 2.0625em 0.9375em 0 -0.9375em,
-    0 0 0 0.375em #fff, -2.1875em 0.6875em 0 -0.3125em #fff,
-    2.0625em 0.9375em 0 -0.5625em #fff;
+    0 0 0 0.375em #000, -2.1875em 0.6875em 0 -0.3125em #000,
+    2.0625em 0.9375em 0 -0.5625em #000;
 }
+
 .cloud:after {
   content: "";
   position: absolute;
@@ -206,20 +242,20 @@ p {
   width: 4.5625em;
   height: 1em;
   background: currentColor;
-  box-shadow: 0 0.4375em 0 -0.0625em #fff;
+  box-shadow: 0 0.4375em 0 -0.0625em #000;
 }
 .cloud:nth-child(2) {
   z-index: 0;
-  background: #fff;
-  box-shadow: -2.1875em 0.6875em 0 -0.6875em #fff,
-    2.0625em 0.9375em 0 -0.9375em #fff, 0 0 0 0.375em #fff,
-    -2.1875em 0.6875em 0 -0.3125em #fff, 2.0625em 0.9375em 0 -0.5625em #fff;
+  background: #000;
+  box-shadow: -2.1875em 0.6875em 0 -0.6875em #000,
+    2.0625em 0.9375em 0 -0.9375em #000, 0 0 0 0.375em #000,
+    -2.1875em 0.6875em 0 -0.3125em #000, 2.0625em 0.9375em 0 -0.5625em #000;
   opacity: 0.3;
   transform: scale(0.5) translate(6em, -3em);
   animation: cloud 4s linear infinite;
 }
 .cloud:nth-child(2):after {
-  background: #fff;
+  background: #000;
 }
 
 .sun {
@@ -231,7 +267,7 @@ p {
   margin: -1.25em;
   background: currentColor;
   border-radius: 50%;
-  box-shadow: 0 0 0 0.375em #fff;
+  box-shadow: 0 0 0 0.375em #000;
   animation: spin 12s infinite linear;
 }
 .rays {
@@ -242,9 +278,9 @@ p {
   width: 0.375em;
   height: 1.125em;
   margin-left: -0.1875em;
-  background: #fff;
+  background: #000;
   border-radius: 0.25em;
-  box-shadow: 0 5.375em #fff;
+  box-shadow: 0 5.375em #000;
 }
 .rays:before,
 .rays:after {
@@ -257,9 +293,9 @@ p {
   height: 1.125em;
   transform: rotate(60deg);
   transform-origin: 50% 3.25em;
-  background: #fff;
+  background: #000;
   border-radius: 0.25em;
-  box-shadow: 0 5.375em #fff;
+  box-shadow: 0 5.375em #000;
 }
 .rays:before {
   transform: rotate(120deg);
@@ -292,9 +328,9 @@ p {
   margin: -1em 0 0 -0.25em;
   background: #0cf;
   border-radius: 100% 0 60% 50% / 60% 0 100% 50%;
-  box-shadow: 0.625em 0.875em 0 -0.125em rgba(255, 255, 255, 0.2),
-    -0.875em 1.125em 0 -0.125em rgba(255, 255, 255, 0.2),
-    -1.375em -0.125em 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0.625em 0.875em 0 -0.125em rgba(0, 0, 0, 0.2),
+    -0.875em 1.125em 0 -0.125em rgba(0, 0, 0, 0.2),
+    -1.375em -0.125em 0 rgba(0, 0, 0, 0.2);
   transform: rotate(-28deg);
   animation: rain 3s linear infinite;
 }
@@ -304,7 +340,7 @@ p {
   top: 50%;
   left: 50%;
   margin: -0.25em 0 0 -0.125em;
-  color: #fff;
+  color: #000;
   opacity: 0.3;
   animation: lightning 2s linear infinite;
 }
@@ -360,7 +396,7 @@ p {
   top: 50%;
   left: 50%;
   margin: -1.025em 0 0 -1.0125em;
-  color: #fff;
+  color: #000;
   list-height: 1em;
   opacity: 0.2;
   animation: spin 8s linear infinite reverse;

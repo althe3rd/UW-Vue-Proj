@@ -3,7 +3,7 @@
     <div class="eastSchedule">
         <h2>Eastbound</h2>
         <ul>
-            <li v-for="eastbus of eastbuses" :key="eastbus.id">
+            <li v-for="(eastbus, index) of eastbuses.slice(0,3)" :key="eastbus.id">
                 The {{ eastbus.routeID }} is {{ eastbus.minutes }} minutes away.
             </li>
         </ul>
@@ -12,7 +12,7 @@
     <div class="westSchedule">
         <h2>Westbound</h2>
         <ul>
-            <li v-for="westbus of westbuses" :key="westbus.id">
+            <li v-for="(westbus,index) of westbuses.slice(0,3)" :key="westbus.id">
                 The {{ westbus.routeID }} is {{ westbus.minutes }} minutes away.
             </li>
         </ul>
@@ -92,6 +92,19 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.busdata {
+  padding: 3rem;
+}
+
+.busdata > div:first-child {
+  margin-bottom: 2rem;
+}
+
+h2 {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 1rem;
+}
+
 ul {
   list-style: none;
   margin: 0px;
