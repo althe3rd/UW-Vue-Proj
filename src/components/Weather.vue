@@ -1,5 +1,45 @@
 <template>
   <div class="weather" v-if="dataReady">
+    <div class="icon sun-shower">
+      <div class="cloud"></div>
+      <div class="sun">
+      <div class="rays"></div>
+    </div>
+    <div class="rain"></div>
+  </div>
+
+  <div class="icon thunder-storm">
+    <div class="cloud"></div>
+    <div class="lightning">
+      <div class="bolt"></div>
+      <div class="bolt"></div>
+    </div>
+  </div>
+
+  <div class="icon cloudy">
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+  </div>
+
+    <div class="icon flurries">
+      <div class="cloud"></div>
+      <div class="snow">
+        <div class="flake"></div>
+        <div class="flake"></div>
+      </div>
+    </div>
+
+    <div class="icon sunny">
+      <div class="sun">
+        <div class="rays"></div>
+      </div>
+    </div>
+
+    <div class="icon rainy" :class="{ showIcon: isRain }">
+      <div class="cloud"></div>
+      <div class="rain"></div>
+    </div>
+
     <div class="temp">{{ weatherdata.main.temp }} &#176;F</div>
     <div class="condition">{{ weatherdata.weather[0].main }}</div>
   </div>
@@ -14,7 +54,8 @@ export default {
     return {
       weatherdata: [],
       errors: [],
-      dataReady: false
+      dataReady: false,
+      isRain: false
     };
   },
   created: function() {
@@ -43,7 +84,10 @@ export default {
         this.dataReady = true;
         this.weatherdata = weathercached;
       }
+    } else {
+      this.getWeather();
     }
+    this.adaptCondition();
   },
   methods: {
     getWeather: function() {
@@ -68,6 +112,11 @@ export default {
         .catch(e => {
           this.errors.push(e);
         });
+    },
+    adaptCondition: function() {
+      if (this.weatherdata.weather[0].main == "Drizzle") {
+        this.isRain = true;
+      }
     }
   }
 };
@@ -123,10 +172,15 @@ p {
 
 .icon {
   position: relative;
-  display: inline-block;
+  display: none;
   width: 12em;
+  margin: 0 auto;
   height: 10em;
   font-size: 1em; /* control icon size here */
+}
+
+.icon.showIcon {
+  display: block;
 }
 
 .cloud {
@@ -224,7 +278,7 @@ p {
   width: 3.75em;
   height: 3.75em;
   margin: 0.375em 0 0 -2em;
-  background: currentColor;
+  background: transparent;
 }
 
 .rain:after {
