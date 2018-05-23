@@ -9,11 +9,18 @@
         <img :src="post._embedded['wp:featuredmedia'][0].media_details.sizes['full'].source_url" />
       </li>
     </transition-group>
+
+    <div class="prefetch" aria-hidden="true">
+        <div v-for="post of posts" :key="post.id" v-if="post._embedded['wp:featuredmedia'][0].media_details.sizes['full']" v-images-loaded:on.done="imageProgress">
+            <img :src="post._embedded['wp:featuredmedia'][0].media_details.sizes['full'].source_url" />
+        </div>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import imagesLoaded from "vue-images-loaded";
 
 export default {
   name: "Slides",
@@ -21,26 +28,28 @@ export default {
     return {
       posts: [],
       errors: [],
-      postindex: 0
+      postindex: 0,
+      imagesloading: 0
     };
+  },
+  directives: {
+    imagesLoaded
   },
   created: function() {
     var obj = this;
 
+    //Slide auto rotate setup
     setInterval(function() {
       obj.changeSlide();
     }, 12000);
 
+    //Auto check for new slide content once every 30 minutes
+    setInterval(function() {
+      obj.refreshSlides();
+    }, 1800000);
+
     //retrieve posts
-    axios
-      .get(`https://news.wisc.edu/wp-json/wp/v2/posts/?_embed&per_page=10`)
-      .then(response => {
-        // JSON responses are automatically parsed.
-        this.posts = response.data;
-      })
-      .catch(e => {
-        this.errors.push(e);
-      });
+    obj.refreshSlides();
   },
   methods: {
     changeSlide() {
@@ -49,6 +58,34 @@ export default {
       } else {
         this.postindex = 0;
       }
+    },
+    refreshSlides() {
+      //retrieve posts
+      axios
+        .get(`https://news.wisc.edu/wp-json/wp/v2/posts/?_embed&per_page=10`)
+        .then(response => {
+          // JSON responses are automatically parsed.
+          this.posts = response.data;
+        })
+        .catch(e => {
+          this.errors.push(e);
+        });
+    },
+    imageProgress() {
+      this.imagesloading = this.imagesloading + 1;
+
+      var loaded = this.imagesloading;
+      var available = this.posts.length;
+      //console.log(loaded + " out of " + available);
+
+      if (loaded == available) {
+        //console.log("images are loaded");
+        this.imagesloaded = true;
+        this.$emit("imagecheck", true);
+      }
+
+      //const result = image.isLoaded ? "loaded" : "broken";
+      //console.log("image is " + result + " for " + image.img.src);
     }
   }
 };
@@ -63,6 +100,10 @@ export default {
   width: 75%;
   height: 100%;
   z-index: 1;
+
+  .prefetch {
+    opacity: 0;
+  }
 
   ul {
     margin: 0px;
@@ -107,6 +148,33 @@ export default {
 
     li:nth-child(10) {
       z-index: 1;
+    }
+
+    li:before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      height: 30%;
+      z-index: 1;
+      background: -moz-linear-gradient(
+        top,
+        rgba(0, 0, 0, 0.65) 0%,
+        rgba(0, 0, 0, 0) 100%
+      ); /* FF3.6-15 */
+      background: -webkit-linear-gradient(
+        top,
+        rgba(0, 0, 0, 0.65) 0%,
+        rgba(0, 0, 0, 0) 100%
+      ); /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.65) 0%,
+        rgba(0, 0, 0, 0) 100%
+      ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
     }
 
     li:after {
@@ -200,13 +268,13 @@ export default {
 }
 .slide-fade-enter
 /* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(100px) rotate(10deg);
+  transform: translateX(100px) rotate(10deg) scale(0.9);
   transform-origin: center bottom;
   opacity: 0;
 }
 
 .slide-fade-leave-to {
-  transform: translateX(-100px) rotate(-10deg);
+  transform: translateX(-100px) rotate(-10deg) scale(0.9);
   transform-origin: center bottom;
   opacity: 0;
 }

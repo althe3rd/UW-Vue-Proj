@@ -1,28 +1,56 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png" class="logo" alt="University of Wisconsin News" />
 
-    <Slides />
+    <Logo />
+
+    <Slides @imagecheck="imagecheck" />
 
     <div class="sideBar">
       <BusSchedule />
       <Weather />
     </div>
 
+    <div class="preloader" :class="{loaded: isLoaded && loadTimer}">
+      <LoadingAnim />
+    </div>
+
   </div>
 </template>
 
 <script>
+import LoadingAnim from "./components/LoadingAnim.vue";
+import Logo from "./components/Logo.vue";
 import Slides from "./components/Slides.vue";
 import BusSchedule from "./components/BusSchedule.vue";
 import Weather from "./components/Weather.vue";
 
 export default {
   name: "app",
+  data() {
+    return {
+      isLoaded: false,
+      loadTimer: false
+    };
+  },
   components: {
     Slides,
     BusSchedule,
-    Weather
+    Weather,
+    Logo,
+    LoadingAnim
+  },
+  created: function() {
+    var obj = this;
+
+    //Delay load slightly to demo preloader
+    setTimeout(function() {
+      obj.loadTimer = true;
+    }, 3000);
+  },
+  methods: {
+    imagecheck: function() {
+      this.isLoaded = true;
+    }
   }
 };
 </script>
@@ -74,14 +102,6 @@ body {
   height: 100vh;
 }
 
-.logo {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  max-height: 100px;
-  z-index: 20;
-}
-
 .sideBar {
   position: fixed;
   top: 0px;
@@ -95,10 +115,43 @@ body {
   box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.2);
 }
 
+.preloader {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  height: 100%;
+  width: 100%;
+  z-index: 20;
+  background: #fff;
+}
+
+.preloader.loaded {
+  animation-name: slidefade;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-delay: 0.5s;
+}
+
 h2 {
   font-family: "Verlag-black";
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 1.1rem;
+}
+
+@keyframes slidefade {
+  0% {
+    opacitiy: 1;
+  }
+
+  50% {
+    transform: translateX(75%);
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(75%);
+  }
 }
 </style>
