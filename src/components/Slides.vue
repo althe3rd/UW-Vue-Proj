@@ -1,7 +1,7 @@
 <template>
   <div class="wpSlides">
     <transition-group name="slide-fade" tag="ul">
-      <li v-for="(post,index) of posts" :key="post.id" v-if="index == postindex && post._embedded['wp:featuredmedia'][0].media_details.sizes['full']">
+      <li v-for="(post,index) of posts" :key="post.id" v-if="index == postindex && post._embedded['wp:featuredmedia']">
         <div class="slideCopy">
             <h1 v-html="post.title.rendered"></h1>
             <div class="excerpt" v-html="post.excerpt.rendered"></div>
@@ -11,7 +11,7 @@
     </transition-group>
 
     <div class="prefetch" aria-hidden="true">
-        <div v-for="post of posts" :key="post.id" v-if="post._embedded['wp:featuredmedia'][0].media_details.sizes['full']" v-images-loaded:on.done="imageProgress">
+        <div v-for="post of posts" :key="post.id" v-if="post._embedded['wp:featuredmedia']" v-images-loaded:on.done="imageProgress">
             <img :src="post._embedded['wp:featuredmedia'][0].media_details.sizes['full'].source_url" />
         </div>
     </div>
@@ -24,6 +24,7 @@ import imagesLoaded from "vue-images-loaded";
 
 export default {
   name: "Slides",
+  props: ["slidesurl"],
   data() {
     return {
       posts: [],
@@ -62,10 +63,23 @@ export default {
     refreshSlides() {
       //retrieve posts
       axios
-        .get(`https://news.wisc.edu/wp-json/wp/v2/posts/?_embed&per_page=10`)
+        .get(this.slidesurl + `/wp-json/wp/v2/posts/?_embed&per_page=20`)
         .then(response => {
           // JSON responses are automatically parsed.
-          this.posts = response.data;
+          var initialslides = response.data;
+          var newslides = [];
+
+          //Look in array to see that an image exists for a post.
+          var i;
+          for (i = 0; i < initialslides.length; i++) {
+            var checkon = initialslides[i]._embedded["wp:featuredmedia"];
+            if (checkon) {
+              newslides.push(initialslides[i]);
+            }
+          }
+
+          //Save the 5 more recent slides to vue data.
+          this.posts = newslides.slice(0, 5);
         })
         .catch(e => {
           this.errors.push(e);

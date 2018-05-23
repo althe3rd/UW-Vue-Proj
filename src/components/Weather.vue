@@ -41,7 +41,7 @@
     </div>
 
 
-        <div class="temp">{{ tempInt }} &#176;F</div>
+        <div class="temp">{{ tempInt }} <span>&#176;</span></div>
         <div class="condition">{{ weatherdata.weather[0].main }}</div>
 
   </div>
@@ -161,32 +161,21 @@ export default {
 <style scoped lang="scss">
 .weather {
   .temp {
-    font-size: 5rem;
+    font-size: 8rem;
     font-weight: bold;
+    display: inline-block;
+
+    span {
+      font-family: "Verlag-Light";
+      color: rgba(0, 0, 0, 0.5);
+      font-size: 7rem;
+      margin-left: -1px;
+    }
   }
 
   .condition {
     font-size: 3rem;
   }
-}
-
-html {
-  box-sizing: border-box;
-}
-html *,
-html *:before,
-html *:after {
-  box-sizing: inherit;
-}
-
-body {
-  max-width: 42em;
-  padding: 2em;
-  margin: 0 auto;
-  color: #161616;
-  font-family: "Roboto", sans-serif;
-  text-align: center;
-  background-color: currentColor;
 }
 
 h1 {

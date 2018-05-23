@@ -1,6 +1,7 @@
 <template>
     <div class="loadinganimation">
-        <div class="loadingtext">Loading!!</div>
+        <img src="../assets/uw_logo_dark.svg" alt="University of Wisconsin" />
+        <div class="loadingtext"><span>Grow.</span><span>Share.</span><span>Learn.</span></div>
     </div>
 </template>
 
@@ -20,6 +21,11 @@ export default {
   transform: translate(-50%, -50%);
   transition: opacity 0.4s;
   opacity: 1;
+
+  img {
+    height: 170px;
+    margin-bottom: 50px;
+  }
 }
 
 .loaded .loadinganimation {
@@ -27,6 +33,36 @@ export default {
 }
 
 .loadingtext {
-  font-size: 3rem;
+  font-size: 1rem;
+  font-family: "Verlag-Black";
+  color: rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+
+  span {
+    display: inline-block;
+    margin-right: 1rem;
+    opacity: 0;
+    animation-name: fadein;
+    animation-duration: 0.8s;
+    animation-fill-mode: forwards;
+  }
+
+  span:nth-child(2) {
+    animation-delay: 0.8s;
+  }
+
+  span:nth-child(3) {
+    animation-delay: 1.4s;
+  }
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 </style>

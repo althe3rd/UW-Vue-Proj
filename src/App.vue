@@ -3,7 +3,7 @@
 
     <Logo />
 
-    <Slides @imagecheck="imagecheck" />
+    <Slides @imagecheck="imagecheck" :slidesurl="slidesurl" />
 
     <div class="sideBar">
       <BusSchedule />
@@ -29,7 +29,8 @@ export default {
   data() {
     return {
       isLoaded: false,
-      loadTimer: false
+      loadTimer: false,
+      slidesurl: "https://news.wisc.edu"
     };
   },
   components: {
