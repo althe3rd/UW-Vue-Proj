@@ -160,21 +160,25 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .weather {
+  position: relative;
+
   .temp {
+    margin-top: 4rem;
     font-size: 8rem;
     font-weight: bold;
     display: inline-block;
+    line-height: 1;
 
     span {
       font-family: "Verlag-Light";
       color: rgba(0, 0, 0, 0.5);
       font-size: 7rem;
-      margin-left: -1px;
+      margin-left: -25px;
     }
   }
 
   .condition {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 }
 
@@ -195,7 +199,9 @@ p {
 }
 
 .icon {
-  position: relative;
+  position: absolute;
+  top: -20px;
+  right: -20px;
   display: none;
   width: 12em;
   margin: 0 auto;

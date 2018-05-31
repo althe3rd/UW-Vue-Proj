@@ -42,7 +42,7 @@ export default {
     //Slide auto rotate setup
     setInterval(function() {
       obj.changeSlide();
-    }, 12000);
+    }, 15000);
 
     //Auto check for new slide content once every 30 minutes
     setInterval(function() {
@@ -108,12 +108,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .wpSlides {
-  position: fixed;
+  position: absolute;
   top: 0px;
   left: 0px;
-  width: 75%;
+  width: 100%;
   height: 100%;
   z-index: 1;
+  overflow: hidden;
 
   .prefetch {
     opacity: 0;
@@ -270,6 +271,16 @@ export default {
         object-fit: cover;
       }
     }
+  }
+}
+
+@media only screen and (max-width: 1300px) {
+  .wpSlides ul li .slideCopy h1 {
+    font-size: 2rem;
+  }
+
+  .wpSlides ul li .slideCopy .excerpt {
+    font-size: 1.5rem;
   }
 }
 

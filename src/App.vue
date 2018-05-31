@@ -1,13 +1,15 @@
 <template>
   <div id="app">
+    <div class="flex">
+      <div class="slideContainer">
+        <Logo />
+        <Slides @imagecheck="imagecheck" :slidesurl="slidesurl" />
+      </div>
 
-    <Logo />
-
-    <Slides @imagecheck="imagecheck" :slidesurl="slidesurl" />
-
-    <div class="sideBar">
-      <BusSchedule />
-      <Weather />
+      <div class="sideBar">
+        <Weather />
+        <BusSchedule />
+      </div>
     </div>
 
     <div class="preloader" :class="{loaded: isLoaded && loadTimer}">
@@ -101,19 +103,34 @@ body {
   margin: 0px;
   background: #000;
   height: 100vh;
+  overflow: hidden;
+}
+
+.flex {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.slideContainer {
+  flex-grow: 1;
+  position: relative;
 }
 
 .sideBar {
-  position: fixed;
-  top: 0px;
-  right: 0px;
-  height: 100%;
-  width: 25%;
-  z-index: 10;
+  position: relative;
+  flex-basis: 25%;
+  min-width: 420px;
   color: #000;
   background: #fff;
   border-left: 4px solid #c5050c;
   box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.2);
+}
+
+@media only screen and (max-width: 1300px) {
+  .sideBar {
+    min-width: 360px;
+  }
 }
 
 .preloader {
