@@ -47,12 +47,16 @@ export default {
     animation-fill-mode: forwards;
   }
 
+  span:nth-child(1) {
+    animation-delay: 0.4s;
+  }
+
   span:nth-child(2) {
-    animation-delay: 0.8s;
+    animation-delay: 1s;
   }
 
   span:nth-child(3) {
-    animation-delay: 1.4s;
+    animation-delay: 1.6s;
   }
 }
 
