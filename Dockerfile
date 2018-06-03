@@ -6,8 +6,10 @@ FROM nginx:latest
 WORKDIR /usr/share/nginx/html
 # change working directory to root of nginx webhost
 # using WORKDIR is prefered to using 'RUN cd /some/path'
-RUN apt-get update && apt-get install -y git && apt-get install -y vim
+#Install GIT
+RUN apt-get update && apt-get install -y git
 
+#Grab the latest commit from the master branch
 RUN git clone https://github.com/althe3rd/UW-Vue-Proj.git && rm -rf index.html && cp -R UW-Vue-Proj/dist/. ./
 #RUN ls -la /*
 
