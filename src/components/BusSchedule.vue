@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     getArrivals: function(stopID, key, direction) {
-      var url = "http://api.smsmybus.com/v1/getarrivals";
+      var url = "https://api.smsmybus.com/v1/getarrivals";
 
       $.ajax({
         type: "GET",
@@ -116,7 +116,7 @@ export default {
 .arriving {
   font-weight: bold;
   color: #c5050c;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
 }
 
 .arrivingIcon {
@@ -137,7 +137,7 @@ export default {
 }
 
 .key {
-  margin-top: 4rem;
+  margin-top: 2rem;
   font-size: 1.2rem;
 
   svg {
@@ -181,7 +181,7 @@ ul {
     position: relative;
     margin: 0px;
     padding: 0px;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
   }
 }
 
@@ -193,7 +193,7 @@ ul {
   .arriving {
     font-weight: bold;
     color: #c5050c;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
 
   .arrivingIcon {
