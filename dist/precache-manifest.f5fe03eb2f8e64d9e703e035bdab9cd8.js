@@ -12,15 +12,15 @@ self.__precacheManifest = [
     "url": "/fonts/VerlagBlack.3130afa9.woff"
   },
   {
-    "revision": "28fb672582b1be3671de",
-    "url": "/js/app.28fb6725.js"
+    "revision": "6a49a16c345090368523",
+    "url": "/js/app.6a49a16c.js"
   },
   {
     "revision": "aae32f996fe01c1d994552b267d241ab",
     "url": "/fonts/VerlagBook.aae32f99.eot"
   },
   {
-    "revision": "7f901a689e5028fc16eff6cc67ce14fa",
+    "revision": "1b317f2fe7b06e2ef71fc49f5e63d145",
     "url": "/index.html"
   },
   {
@@ -76,7 +76,7 @@ self.__precacheManifest = [
     "url": "/fonts/Verlag-Light.0790e999.ttf"
   },
   {
-    "revision": "28fb672582b1be3671de",
-    "url": "/css/app.81f8f7ac.css"
+    "revision": "6a49a16c345090368523",
+    "url": "/css/app.020b6f52.css"
   }
 ];
