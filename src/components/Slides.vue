@@ -1,6 +1,6 @@
 <template>
   <div class="wpSlides">
-    <transition-group name="slide-fade" tag="ul">
+    <transition-group name="slide-fade" tag="ul" mode="in-out">
       <li v-for="(post,index) of posts" :key="post.id" v-if="index == postindex && post._embedded['wp:featuredmedia']">
         <div class="slideCopy">
             <h1 v-html="post.title.rendered"></h1>

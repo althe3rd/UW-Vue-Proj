@@ -1,3 +1,8 @@
 module.exports = {
-  lintOnSave: false
+  lintOnSave: undefined,
+
+  pwa: {
+    name: "UW News",
+    themeColor: "#D3231C"
+  }
 };
