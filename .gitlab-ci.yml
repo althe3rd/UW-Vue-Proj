@@ -13,4 +13,4 @@ pages:
   - master
   environment:
     name: staging
-    url: https://vuedemo3.example.com
+    url: https://vuedemo3.heroiccloud.com
