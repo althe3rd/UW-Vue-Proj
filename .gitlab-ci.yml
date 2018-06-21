@@ -1,16 +1,37 @@
-# This file is a template, and might need editing before it works on your project.
-# Full project: https://gitlab.com/pages/plain-html
-pages:
+image: docker:git
+services:
+  - docker:dind
+variables:
+  DOCKER_DRIVER: overlay
+
+before_script:
+  - docker login -u gitlab-ci-token -p "$CI_BUILD_TOKEN" "$CI_REGISTRY"
+
+#development:
+#  stage: deploy
+#  script:
+#    - docker build -t "$CI_REGISTRY_IMAGE:latest" .
+#    - docker push "$CI_REGISTRY_IMAGE:latest"
+#  only:
+#    - master
+
+#testing:
+#  stage: deploy
+#  script:
+#    - docker build -t "$CI_REGISTRY_IMAGE:${CI_COMMIT_REF_SLUG}" .
+#    - docker push "$CI_REGISTRY_IMAGE:${CI_COMMIT_REF_SLUG}"
+#  only:
+#    - branches
+#  except:
+#    - master
+
+stable:
   stage: deploy
   script:
-  - mkdir .public
-  - cp -r dist/* .public
-  - mv .public public
-  artifacts:
-    paths:
-    - public
+    - docker build -t "$CI_REGISTRY_IMAGE:${CI_COMMIT_REF_SLUG}" .
+    - docker push "$CI_REGISTRY_IMAGE:${CI_COMMIT_REF_SLUG}"
   only:
-  - master
+    - master
   environment:
     name: staging
     url: https://vuedemo3.heroiccloud.com
