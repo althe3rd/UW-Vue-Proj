@@ -16,7 +16,7 @@ build-master:
     - master
   environment:
     name: staging
-    url: https://vuedemo3.heroiccloud.com
+    url: vuedemo3.heroiccloud.com
 
 
 build:
